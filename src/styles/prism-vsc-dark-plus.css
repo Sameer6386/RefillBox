@@ -1,0 +1,152 @@
+/* Root variables for easy theming and updates */
+:root {
+  --color-background: #1e1e1e;
+  --color-code-bg: #f9f2f4;
+  --color-text: #d4d4d4;
+  --color-keyword: #569cd6;
+  --color-string: #ce9178;
+  --color-comment: #6a9955;
+  --color-punctuation: #d4d4d4;
+  --color-function: #dcdcaa;
+  --color-class: #4ec9b0;
+  --color-boolean: #569cd6;
+  --color-number: #b5cea8;
+  --color-operator: #d4d4d4;
+  --color-atrule: #c586c0;
+  --color-highlight-bg: #f7ebc6;
+  --color-highlight-border: #f7d87c;
+  --font-size-code: clamp(12px, 1vw, 14px);
+  --font-family-code: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono", "Courier New", monospace;
+}
+
+pre[class*="language-"],
+code[class*="language-"] {
+  color: var(--color-text);
+  font-size: var(--font-size-code);
+  font-family: var(--font-family-code);
+  text-shadow: none;
+  background: var(--color-background);
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  hyphens: none;
+}
+
+pre[class*="language-"]::selection,
+code[class*="language-"]::selection {
+  background: #75a7ca;
+}
+
+pre[class*="language-"] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+  background: var(--color-background);
+}
+
+:not(pre)>code[class*="language-"] {
+  padding: 0.1em 0.3em;
+  border-radius: 0.3em;
+  background: var(--color-code-bg);
+  color: #db4c69;
+}
+
+/* Tokens Styling */
+.token.comment,
+.token.prolog {
+  color: var(--color-comment);
+}
+
+.token.punctuation {
+  color: var(--color-punctuation);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.inserted,
+.token.unit {
+  color: var(--color-number);
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.deleted {
+  color: var(--color-string);
+}
+
+.token.operator,
+.token.entity {
+  color: var(--color-operator);
+}
+
+.token.atrule {
+  color: var(--color-atrule);
+}
+
+.token.keyword {
+  color: var(--color-keyword);
+}
+
+.token.function {
+  color: var(--color-function);
+}
+
+.token.class-name,
+.token.maybe-class-name {
+  color: var(--color-class);
+}
+
+/* Language Specific */
+pre[class*="language-javascript"],
+code[class*="language-javascript"],
+pre[class*="language-jsx"],
+code[class*="language-jsx"],
+pre[class*="language-typescript"],
+code[class*="language-typescript"],
+pre[class*="language-tsx"],
+code[class*="language-tsx"] {
+  color: var(--color-keyword);
+}
+
+pre[class*="language-css"],
+code[class*="language-css"] {
+  color: var(--color-string);
+}
+
+pre[class*="language-html"],
+code[class*="language-html"] {
+  color: var(--color-text);
+}
+
+/* Line Highlighting */
+pre[data-line] {
+  position: relative;
+}
+
+pre[class*="language-"]>code[class*="language-"] {
+  position: relative;
+  z-index: 1;
+}
+
+.line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: var(--color-highlight-bg);
+  box-shadow: inset 5px 0 0 var(--color-highlight-border);
+  z-index: 0;
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
