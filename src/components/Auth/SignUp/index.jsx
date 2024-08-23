@@ -6,40 +6,49 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import SocialSignIn from "../SocialSignIn";
-
-import MagicLink from "../MagicLink";
 import Loader from "../../Common/Loader";
 
-const Signin = () => {
+const Signup = () => {
   const router = useRouter();
 
-  const [loginData, setLoginData] = useState({
+  const [signupData, setSignupData] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     checkboxToggle: false,
   });
 
-  const [isPassword, setIsPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const loginUser = (e) => {
+  const signupUser = (e) => {
     e.preventDefault();
 
+    if (signupData.password !== signupData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
     setLoading(true);
-    signIn("credentials", { ...loginData, redirect: false })
-      .then((callback) => {
-        if (callback?.error) {
-          toast.error(callback.error);
-          console.log(callback.error);
+    // Assuming you have a signup API endpoint
+    fetch("/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(signupData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error);
           setLoading(false);
           return;
         }
 
-        if (callback?.ok && !callback?.error) {
-          toast.success("Login successful");
-          setLoading(false);
-          router.push("/");
-        }
+        toast.success("Sign Up successful");
+        setLoading(false);
+        router.push("/signin");
       })
       .catch((err) => {
         setLoading(false);
@@ -85,51 +94,71 @@ const Signin = () => {
                 </span>
               </span>
 
-              {isPassword ? (
-                <form onSubmit={loginUser}>
-                  <div className="mb-[22px]">
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      onChange={(e) =>
-                        setLoginData({ ...loginData, email: e.target.value })
-                      }
-                      className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
-                  <div className="mb-[22px]">
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      onChange={(e) =>
-                        setLoginData({ ...loginData, password: e.target.value })
-                      }
-                      className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
-                  <div className="mb-9">
-                    <button
-                      type="submit"
-                      className="flex w-full cursor-pointer items-center justify-center rounded-md border border-primary bg-primary px-5 py-3 text-base text-white transition duration-300 ease-in-out hover:bg-primary/90"
-                    >
-                      Sign In {loading && <Loader />}
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                <MagicLink />
-              )}
+              <form onSubmit={signupUser}>
+                <div className="mb-[22px]">
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, name: e.target.value })
+                    }
+                    className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
+                    required
+                  />
+                </div>
+                <div className="mb-[22px]">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, email: e.target.value })
+                    }
+                    className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
+                    required
+                  />
+                </div>
+                <div className="mb-[22px]">
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, password: e.target.value })
+                    }
+                    className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
+                    required
+                  />
+                </div>
+                <div className="mb-[22px]">
+                  <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    onChange={(e) =>
+                      setSignupData({
+                        ...signupData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                    className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
+                    required
+                  />
+                </div>
+                <div className="mb-9">
+                  <button
+                    type="submit"
+                    className="flex w-full cursor-pointer items-center justify-center rounded-md border border-primary bg-primary px-5 py-3 text-base text-white transition duration-300 ease-in-out hover:bg-primary/90"
+                  >
+                    Sign Up {loading && <Loader />}
+                  </button>
+                </div>
+              </form>
 
-              <Link
-                href="/forgot-password"
-                className="mb-2 inline-block text-base text-dark hover:text-primary dark:text-white dark:hover:text-primary"
-              >
-                Forgot Password?
-              </Link>
               <p className="text-body-secondary text-base">
-                Not a member yet?{" "}
-                <Link href="/signup" className="text-primary hover:underline">
-                  Sign Up
+                Already have an account?
+                <Link
+                  href="/signin"
+                  className="pl-2 text-primary hover:underline"
+                >
+                  Sign In
                 </Link>
               </p>
             </div>
@@ -140,4 +169,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;

@@ -290,12 +290,12 @@ const Header = () => {
                   </>
                 ) : (
                   <Link
-                    href="/signin"
+                    href="/signup"
                     className={`ud-main-btn ud-login-btn text-white mx-2 flex items-center justify-between rounded-full border-[2px] border-transparent hover:border-primary ${
                       pathUrl !== "/" && "dark:text-white"
                     } ${pathUrl === "/" && sticky && "text-white"}`}
                   >
-                    Sign In
+                    Sign Up
                   </Link>
                 )}
               </div>

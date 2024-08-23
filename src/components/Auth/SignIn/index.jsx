@@ -8,9 +8,8 @@ import { useState } from "react";
 import MagicLink from "../MagicLink";
 import Loader from "../../Common/Loader";
 
-const SignUp = () => {
+const SignIn = () => {
   const router = useRouter();
-  const [isPassword, setIsPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
@@ -21,7 +20,7 @@ const SignUp = () => {
     const value = Object.fromEntries(data.entries());
     const finalData = { ...value };
 
-    fetch("/api/register", {
+    fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,9 +29,14 @@ const SignUp = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        toast.success("Successfully registered");
+        if (data.error) {
+          toast.error(data.error);
+          setLoading(false);
+          return;
+        }
+        toast.success("Successfully signed in");
         setLoading(false);
-        router.push("/signin");
+        router.push("/");
       })
       .catch((err) => {
         toast.error(err.message);
@@ -77,22 +81,8 @@ const SignUp = () => {
                 </span>
               </span>
 
-              {/* <SwitchOption
-                isPassword={isPassword}
-                setIsPassword={setIsPassword}
-              /> */}
-
-              {isPassword ? (
+              {true ? ( // Assuming `isPassword` is always true for a sign-in page
                 <form onSubmit={handleSubmit}>
-                  <div className="mb-[22px]">
-                    <input
-                      type="text"
-                      placeholder="Name"
-                      name="name"
-                      required
-                      className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
                   <div className="mb-[22px]">
                     <input
                       type="email"
@@ -116,7 +106,7 @@ const SignUp = () => {
                       type="submit"
                       className="flex w-full cursor-pointer items-center justify-center rounded-md border border-primary bg-primary px-5 py-3 text-base text-white transition duration-300 ease-in-out hover:bg-blue-dark"
                     >
-                      Sign Up {loading && <Loader />}
+                      Sign In {loading && <Loader />}
                     </button>
                   </div>
                 </form>
@@ -124,8 +114,15 @@ const SignUp = () => {
                 <MagicLink />
               )}
 
+              <Link
+                href="/forgetpasword"
+                className="mb-2 inline-block text-base text-dark hover:text-primary dark:text-white dark:hover:text-primary"
+              >
+                Forgot Password?
+              </Link>
+
               <p className="text-body-secondary mb-4 text-base">
-                By creating an account you are agree with our{" "}
+                By signing in you agree with our{" "}
                 <a href="/#" className="text-primary hover:underline">
                   Privacy
                 </a>{" "}
@@ -136,12 +133,12 @@ const SignUp = () => {
               </p>
 
               <p className="text-body-secondary text-base">
-                Already have an account?
+                Don&apos;t have an account?{" "}
                 <Link
-                  href="/signin"
+                  href="/signup"
                   className="pl-2 text-primary hover:underline"
                 >
-                  Sign In
+                  Sign Up
                 </Link>
               </p>
 
@@ -154,4 +151,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
