@@ -8,7 +8,7 @@ const menuData = [
     path: "/about",
   },
   {
-    title: "Services",
+    title: "Service",
     path: "/services",
     submenu: [
       { title: "Web Design", path: "/services/web-design" },

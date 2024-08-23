@@ -6,11 +6,9 @@ const SignupPage = () => {
   return (
     <>
       <Head>
-        <title>
-          Sign Up | Play SaaS Starter Kit and Boilerplate for Next.js
-        </title>
+        <title>Sign Up</title>
       </Head>
-      <Breadcrumb pageName="Sign Up Page" />
+      <Breadcrumb pageName="Sign Up " />
       <SignUp />
     </>
   );

@@ -6,6 +6,7 @@ import ScrollUp from "../components/Common/ScrollUp";
 import Contact from "../components/Contact";
 import Faq from "../components/Faq";
 import Team from "../components/Team";
+import Services from "../components/Service";
 import Testimonials from "../components/Testimonials";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <ScrollUp />
       <Hero />
       <About />
+      <Services />
       <CallToAction />
       <LatestJobPost />
       <Testimonials />

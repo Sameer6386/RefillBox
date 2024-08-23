@@ -5,7 +5,7 @@ import Team from "../../../components/Team";
 const AboutPage = () => {
   return (
     <main>
-      <Breadcrumb pageName="About Us Page" />
+      <Breadcrumb pageName="About Us " />
       <About />
       <Team />
     </main>

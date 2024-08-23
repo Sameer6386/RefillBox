@@ -8,7 +8,7 @@ const SigninPage = () => {
       <Head>
         <title>Sign In </title>
       </Head>
-      <Breadcrumb pageName="Sign In Page" />
+      <Breadcrumb pageName="Sign In" />
       <Signin />
     </>
   );
