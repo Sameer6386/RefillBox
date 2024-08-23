@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import SocialSignIn from "../SocialSignIn";
-import SwitchOption from "../SwitchOption";
+
 import MagicLink from "../MagicLink";
-import Loader from "@/components/Common/Loader";
+import Loader from "../../Common/Loader";
 
 const Signin = () => {
   const router = useRouter();
@@ -84,11 +84,6 @@ const Signin = () => {
                   OR
                 </span>
               </span>
-
-              <SwitchOption
-                isPassword={isPassword}
-                setIsPassword={setIsPassword}
-              />
 
               {isPassword ? (
                 <form onSubmit={loginUser}>

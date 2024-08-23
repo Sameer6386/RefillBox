@@ -1,5 +1,5 @@
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import Services from "../../../components/Services";
+import Services from "../../../components/Service";
 import CallToAction from "../../../components/CallToAction";
 import Footer from "../../../components/Footer";
 const ServicePage = () => {
