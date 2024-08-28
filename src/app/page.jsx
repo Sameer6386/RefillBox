@@ -6,7 +6,7 @@ import ScrollUp from "../components/Common/ScrollUp";
 import Contact from "../components/Contact";
 import Faq from "../components/Faq";
 import Team from "../components/Team";
-import AdminDashboard from "../components/Admin";
+import Dashboard from "../components/Admin";
 import Services from "../components/Service";
 import Testimonials from "../components/Testimonials";
 
@@ -21,7 +21,7 @@ export default function Home() {
       <LatestJobPost />
       <Testimonials />
       <Faq />
-      <AdminDashboard />
+      <Dashboard />
       <Team />
       <Contact />
     </>
