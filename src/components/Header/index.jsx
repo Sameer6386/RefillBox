@@ -5,13 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { FiSun, FiMoon } from "react-icons/fi"; // Theme toggle icons
+import { FaUser } from "react-icons/fa"; // User icon
+import { RiArrowDownSLine } from "react-icons/ri"; // Arrow down icon
 import menuData from "./menuData";
 
 const Header = () => {
   const { data: session } = useSession();
-
   const pathUrl = usePathname();
+
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
@@ -29,281 +31,160 @@ const Header = () => {
   };
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
-  });
+    return () => {
+      window.removeEventListener("scroll", handleStickyNavbar);
+    };
+  }, []);
 
   // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
   const handleSubmenu = (index) => {
-    if (openIndex === index) {
-      setOpenIndex(-1);
-    } else {
-      setOpenIndex(index);
-    }
+    setOpenIndex(openIndex === index ? -1 : index);
   };
 
   const { theme, setTheme } = useTheme();
 
   return (
-    <>
-      <header
-        className={`ud-header left-0 top-0 z-40 flex w-full items-center ${
-          sticky
-            ? "shadow-nav fixed z-[999] border-b border-stroke bg-white/80 backdrop-blur-[5px] dark:border-dark-3/20 dark:bg-dark/10"
-            : "absolute bg-transparent"
-        }`}
-      >
-        <div className="container">
-          <div className="relative -mx-4 flex items-center justify-between">
-            <div className="w-60 max-w-full px-4">
-              <Link
-                href="/"
-                className={`navbar-logo block w-full ${
-                  sticky ? "py-2" : "py-5"
-                } `}
-              >
-                {pathUrl !== "/" ? (
-                  <>
-                    <Image
-                      src={`/images/logo/logo.svg`}
-                      alt="logo"
-                      width={240}
-                      height={30}
-                      className="header-logo w-full dark:hidden"
-                    />
-                    <Image
-                      src={`/images/logo/logo-white.svg`}
-                      alt="logo"
-                      width={240}
-                      height={30}
-                      className="header-logo hidden w-full dark:block"
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Image
-                      src={`${
-                        sticky
-                          ? "/images/logo/logo.svg"
-                          : "/images/logo/logo-white.svg"
-                      }`}
-                      alt="logo"
-                      width={140}
-                      height={30}
-                      className="header-logo w-full dark:hidden"
-                    />
-                    <Image
-                      src={"/images/logo/logo-white.svg"}
-                      alt="logo"
-                      width={140}
-                      height={30}
-                      className="header-logo hidden w-full dark:block"
-                    />
-                  </>
-                )}
-              </Link>
-            </div>
-            <div className="flex w-full items-center justify-between px-4">
-              <div>
-                <button
-                  onClick={navbarToggleHandler}
-                  id="navbarToggler"
-                  aria-label="Mobile Menu"
-                  className="absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden"
-                >
-                  <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] transition-all duration-300 ${
-                      navbarOpen ? " top-[7px] rotate-45" : " "
-                    } ${pathUrl !== "/" && "!bg-dark dark:!bg-white"} ${
-                      pathUrl === "/" && sticky
-                        ? "bg-dark dark:bg-white"
-                        : "bg-white"
-                    }`}
-                  />
-                  <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] transition-all duration-300 ${
-                      navbarOpen ? "opacity-0 " : " "
-                    } ${pathUrl !== "/" && "!bg-dark dark:!bg-white"} ${
-                      pathUrl === "/" && sticky
-                        ? "bg-dark dark:bg-white"
-                        : "bg-white"
-                    }`}
-                  />
-                  <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] transition-all duration-300 ${
-                      navbarOpen ? " top-[-8px] -rotate-45" : " "
-                    } ${pathUrl !== "/" && "!bg-dark dark:!bg-white"} ${
-                      pathUrl === "/" && sticky
-                        ? "bg-dark dark:bg-white"
-                        : "bg-white"
-                    }`}
-                  />
-                </button>
-                <nav
-                  id="navbarCollapse"
-                  className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 bg-white px-6 py-4 duration-300 dark:border-body-color/20 dark:bg-dark-2 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 lg:dark:bg-transparent ${
-                    navbarOpen
-                      ? "visibility top-full opacity-100"
-                      : "invisible top-[120%] opacity-0"
-                  }`}
-                >
-                  <ul className="block lg:ml-8 lg:flex lg:gap-x-8 xl:ml-14 xl:gap-x-12">
-                    {menuData.map((menuItem, index) =>
-                      menuItem.path ? (
-                        <li key={index} className="group relative">
-                          {pathUrl !== "/" ? (
-                            <Link
-                              onClick={navbarToggleHandler}
-                              scroll={false}
-                              href={menuItem.path}
-                              className={`ud-menu-scroll flex py-2 text-base text-dark group-hover:text-primary dark:text-white dark:group-hover:text-primary lg:inline-flex lg:px-0 lg:py-6 ${
-                                pathUrl === menuItem?.path && "text-primary"
-                              }`}
-                            >
-                              {menuItem.title}
-                            </Link>
-                          ) : (
-                            <Link
-                              scroll={false}
-                              href={menuItem.path}
-                              className={`ud-menu-scroll flex py-2 text-base lg:inline-flex lg:px-0 lg:py-6 ${
-                                sticky
-                                  ? "text-dark group-hover:text-primary dark:text-white dark:group-hover:text-primary"
-                                  : "text-body-color dark:text-white lg:text-white"
-                              } ${
-                                pathUrl === menuItem?.path &&
-                                sticky &&
-                                "!text-primary"
-                              }`}
-                            >
-                              {menuItem.title}
-                            </Link>
-                          )}
-                        </li>
-                      ) : (
-                        <li className="submenu-item group relative" key={index}>
-                          {pathUrl !== "/" ? (
-                            <button
-                              onClick={() => handleSubmenu(index)}
-                              className={`ud-menu-scroll flex items-center justify-between py-2 text-base text-dark group-hover:text-primary dark:text-white dark:group-hover:text-primary lg:inline-flex lg:px-0 lg:py-6`}
-                            >
-                              {menuItem.title}
-
-                              <span className="pl-1">
-                                <svg
-                                  className={`duration-300 lg:group-hover:rotate-180`}
-                                  width="16"
-                                  height="17"
-                                  viewBox="0 0 16 17"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M8.00039 11.9C7.85039 11.9 7.72539 11.85 7.60039 11.75L1.85039 6.10005C1.62539 5.87505 1.62539 5.52505 1.85039 5.30005C2.07539 5.07505 2.42539 5.07505 2.65039 5.30005L8.00039 10.525L13.3504 5.25005C13.5754 5.02505 13.9254 5.02505 14.1504 5.25005C14.3754 5.47505 14.3754 5.82505 14.1504 6.05005L8.40039 11.7C8.27539 11.825 8.15039 11.9 8.00039 11.9Z"
-                                    fill="currentColor"
-                                  />
-                                </svg>
-                              </span>
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => handleSubmenu(index)}
-                              className={`ud-menu-scroll flex items-center justify-between py-2 text-base lg:inline-flex lg:px-0 lg:py-6 ${
-                                sticky
-                                  ? "text-dark group-hover:text-primary dark:text-white dark:group-hover:text-primary"
-                                  : "text-white"
-                              }`}
-                            >
-                              {menuItem.title}
-
-                              <span className="pl-1">
-                                <svg
-                                  className={`duration-300 lg:group-hover:rotate-180`}
-                                  width="16"
-                                  height="17"
-                                  viewBox="0 0 16 17"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M8.00039 11.9C7.85039 11.9 7.72539 11.85 7.60039 11.75L1.85039 6.10005C1.62539 5.87505 1.62539 5.52505 1.85039 5.30005C2.07539 5.07505 2.42539 5.07505 2.65039 5.30005L8.00039 10.525L13.3504 5.25005C13.5754 5.02505 13.9254 5.02505 14.1504 5.25005C14.3754 5.47505 14.3754 5.82505 14.1504 6.05005L8.40039 11.7C8.27539 11.825 8.15039 11.9 8.00039 11.9Z"
-                                    fill="currentColor"
-                                  />
-                                </svg>
-                              </span>
-                            </button>
-                          )}
-
-                          <div
-                            className={`submenu relative hidden rounded-md bg-white px-4 py-3 dark:bg-dark lg:absolute lg:top-full lg:block lg:w-[250px] lg:opacity-0 lg:group-hover:opacity-100 ${
-                              openIndex === index ? "block" : "hidden"
-                            }`}
-                          >
-                            {menuItem.submenu.map((submenuItem, index) => (
-                              <Link
-                                href={submenuItem.path}
-                                key={index}
-                                className="block rounded py-[10px] text-sm text-body-color hover:text-primary dark:text-white dark:hover:text-primary"
-                              >
-                                {submenuItem.title}
-                              </Link>
-                            ))}
-                          </div>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </nav>
-              </div>
-
-              <div className="hidden justify-end pr-16 sm:flex lg:pr-0">
-                <button
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="text-2xl font-medium text-white hover:opacity-70 dark:text-white"
-                >
-                  {theme === "dark" ? "🌞" : "🌜"}
-                </button>
-                {session ? (
-                  <>
-                    <div
-                      className={`text-dark mx-2 flex items-center justify-between rounded-full border-[2px] border-transparent hover:border-primary ${
-                        pathUrl !== "/" && "dark:text-white"
-                      } ${pathUrl === "/" && sticky && "text-dark"}`}
-                    >
-                      <Link href="/dashboard">
-                        <Image
-                          src="/images/profile.svg"
-                          alt="profile"
-                          width={30}
-                          height={30}
-                          className="rounded-full"
-                        />
-                      </Link>
-                    </div>
-                    <button
-                      className={`text-dark mx-2 flex items-center justify-between rounded-full border-[2px] border-transparent hover:border-primary ${
-                        pathUrl !== "/" && "dark:text-white"
-                      } ${pathUrl === "/" && sticky && "text-dark"}`}
-                      onClick={() => signOut()}
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <Link
-                    href="/signup"
-                    className={`ud-main-btn ud-login-btn text-white mx-2 flex items-center justify-between rounded-full border-[2px] border-transparent hover:border-primary ${
-                      pathUrl !== "/" && "dark:text-white"
-                    } ${pathUrl === "/" && sticky && "text-white"}`}
-                  >
-                    Sign Up
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
+    <header
+      className={`fixed top-0 left-0 z-40 w-full ${
+        sticky
+          ? "shadow-md border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+          : "absolute bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto flex items-center justify-between p-4">
+        {/* Logo */}
+        <div className="flex items-center space-x-4">
+          <Link href="/" aria-label="Home">
+            <Image
+              src={
+                sticky ? "/images/logo/logo.svg" : "/images/logo/logo-white.svg"
+              }
+              alt="logo"
+              width={140}
+              height={30}
+              className="hidden dark:block"
+            />
+            <Image
+              src={
+                sticky ? "/images/logo/logo-white.svg" : "/images/logo/logo.svg"
+              }
+              alt="logo"
+              width={140}
+              height={30}
+              className="block dark:hidden"
+            />
+          </Link>
         </div>
-      </header>
-    </>
+
+        {/* Navbar Toggle for Mobile */}
+        <button
+          onClick={navbarToggleHandler}
+          aria-label="Toggle Navigation"
+          className="lg:hidden flex items-center p-2"
+        >
+          <span
+            className={`block h-0.5 w-8 bg-gray-800 dark:bg-gray-200 transform transition-transform ${
+              navbarOpen ? "rotate-45 translate-y-1" : ""
+            }`}
+          />
+          <span
+            className={`block h-0.5 w-8 bg-gray-800 dark:bg-gray-200 transition-opacity ${
+              navbarOpen ? "opacity-0" : ""
+            }`}
+          />
+          <span
+            className={`block h-0.5 w-8 bg-gray-800 dark:bg-gray-200 transform transition-transform ${
+              navbarOpen ? "-rotate-45 -translate-y-1" : ""
+            }`}
+          />
+        </button>
+
+        {/* Navigation Menu */}
+        <nav
+          className={`absolute top-full right-0 mt-2 w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg lg:relative lg:flex lg:w-auto lg:bg-transparent lg:border-none lg:shadow-none ${
+            navbarOpen ? "block" : "hidden"
+          }`}
+        >
+          <ul className="flex flex-col lg:flex-row lg:space-x-4 p-4 lg:p-0">
+            {menuData.map((menuItem, index) =>
+              menuItem.path ? (
+                <li key={index} className="relative">
+                  <Link
+                    href={menuItem.path}
+                    className={`block py-2 px-4 text-base ${
+                      pathUrl === menuItem.path
+                        ? "text-blue-500 dark:text-blue-400"
+                        : "text-gray-800 dark:text-gray-200"
+                    }`}
+                  >
+                    {menuItem.title}
+                  </Link>
+                </li>
+              ) : (
+                <li key={index} className="relative">
+                  <button
+                    onClick={() => handleSubmenu(index)}
+                    className="flex items-center py-2 px-4 text-base text-gray-800 dark:text-gray-200"
+                  >
+                    {menuItem.title}
+                    <RiArrowDownSLine
+                      className={`ml-2 transition-transform ${
+                        openIndex === index ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  <ul
+                    className={`absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg ${
+                      openIndex === index ? "block" : "hidden"
+                    }`}
+                  >
+                    {menuItem?.submenu?.map((submenuItem, subIndex) => (
+                      <li key={subIndex}>
+                        <Link
+                          href={submenuItem.path}
+                          className="block py-2 px-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          {submenuItem.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )
+            )}
+          </ul>
+        </nav>
+
+        {/* Theme Toggle and User Actions */}
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            aria-label="Toggle Theme"
+            className="text-2xl text-gray-800 dark:text-gray-200"
+          >
+            {theme === "light" ? <FiMoon /> : <FiSun />}
+          </button>
+          {session ? (
+            <button
+              onClick={() => signOut()}
+              aria-label="Sign Out"
+              className="text-2xl text-gray-800 dark:text-gray-200"
+            >
+              <FaUser />
+            </button>
+          ) : (
+            <Link
+              href="/signin"
+              aria-label="Sign In"
+              className="text-2xl text-gray-800 dark:text-gray-200"
+            >
+              <FaUser />
+            </Link>
+          )}
+        </div>
+      </div>
+    </header>
   );
 };
 
