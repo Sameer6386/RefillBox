@@ -7,7 +7,7 @@ import Delete from "../../../models/Delete";
 import AddEmployeeModal from "../../../models/AddEmployee";
 import { FaSearch, FaPlus } from "react-icons/fa";
 
-export default function Dashboard() {
+export default function Admin() {
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
