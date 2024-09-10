@@ -1,5 +1,6 @@
 import SectionTitle from "../Common/SectionTitle";
-import SingleService from "./SingleService";
+import SingleService from "../Service/SingleService";
+import Image from "next/image"; // Import Image component
 
 const serviceData = [
   {
@@ -43,10 +44,12 @@ const Services = () => {
               key={service.id}
               className="max-w-sm p-6 bg-white rounded-lg shadow-lg dark:bg-dark-3 hover:shadow-xl transition-shadow duration-300"
             >
-              <img
+              <Image
                 src={service.icon}
                 alt={`${service.title} icon`}
-                className="mb-4 w-16 h-16 mx-auto"
+                width={64} // Set image width
+                height={64} // Set image height
+                className="mb-4 mx-auto"
               />
               <h3 className="text-xl font-semibold mb-4 text-center dark:text-white">
                 {service.title}

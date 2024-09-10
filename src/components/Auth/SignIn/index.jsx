@@ -6,7 +6,7 @@ const SignIn = () => {
   const router = useRouter();
 
   const handleSignIn = () => {
-    router.push("componentsadminindex.jsx");
+    router.push("admin");
   };
 
   return (
@@ -45,7 +45,7 @@ const SignIn = () => {
               </div>
 
               <p className="text-body-secondary text-base">
-                Don't have an account?
+                Don&apos;t have an account?
                 <a href="/signup" className="pl-2 text-primary hover:underline">
                   Sign Up
                 </a>
