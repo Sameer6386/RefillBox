@@ -1,14 +1,10 @@
 const menuData = [
   {
-    title: "Home",
-    path: "/",
-  },
-  {
     title: "About",
     path: "/about",
   },
   {
-    title: "Service",
+    title: "Services",
     path: "/services",
     submenu: [
       { title: "Web Design", path: "/services/web-design" },

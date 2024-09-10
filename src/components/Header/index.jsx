@@ -5,22 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiSun, FiMoon } from "react-icons/fi"; // Theme toggle icons
-import { FaUser } from "react-icons/fa"; // User icon
-import { RiArrowDownSLine } from "react-icons/ri"; // Arrow down icon
+import { FiSun, FiMoon } from "react-icons/fi";
+import { FaUser } from "react-icons/fa";
+import { RiArrowDownSLine } from "react-icons/ri";
 import menuData from "./menuData";
 
 const Header = () => {
   const { data: session } = useSession();
   const pathUrl = usePathname();
 
-  // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
   };
 
-  // Sticky Navbar
   const [sticky, setSticky] = useState(false);
   const handleStickyNavbar = () => {
     if (window.scrollY >= 80) {
@@ -36,7 +34,6 @@ const Header = () => {
     };
   }, []);
 
-  // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
   const handleSubmenu = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
@@ -48,12 +45,11 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 z-40 w-full ${
         sticky
-          ? "shadow-md border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+          ? "shadow-md border-b border-gray-200 bg-white dark:border-gray-900 dark:bg-gray-900"
           : "absolute bg-transparent"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between p-4">
-        {/* Logo */}
         <div className="flex items-center space-x-4">
           <Link href="/" aria-label="Home">
             <Image
@@ -76,8 +72,6 @@ const Header = () => {
             />
           </Link>
         </div>
-
-        {/* Navbar Toggle for Mobile */}
         <button
           onClick={navbarToggleHandler}
           aria-label="Toggle Navigation"
@@ -100,7 +94,6 @@ const Header = () => {
           />
         </button>
 
-        {/* Navigation Menu */}
         <nav
           className={`absolute top-full right-0 mt-2 w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg lg:relative lg:flex lg:w-auto lg:bg-transparent lg:border-none lg:shadow-none ${
             navbarOpen ? "block" : "hidden"
@@ -156,7 +149,6 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Theme Toggle and User Actions */}
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}

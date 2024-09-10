@@ -30,7 +30,7 @@ const Signup = () => {
     }
 
     setLoading(true);
-    // Assuming you have a signup API endpoint
+
     fetch("/api/auth/signup", {
       method: "POST",
       headers: {

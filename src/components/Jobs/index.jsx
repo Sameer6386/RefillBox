@@ -9,7 +9,7 @@ const jobPostData = [
     location: "San Francisco, CA",
     description:
       "We are looking for a skilled frontend developer with experience in React and Tailwind CSS.",
-    logo: "/images/companies/company-01.png",
+    logo: "/images/job/uideck-white.svg",
     postedDate: "August 20, 2024",
   },
   {
@@ -19,7 +19,7 @@ const jobPostData = [
     location: "New York, NY",
     description:
       "Join our team as a backend developer. Experience with Node.js and MongoDB is required.",
-    logo: "/images/companies/company-02.png",
+    logo: "/images/job/graygrids-white.svg",
     postedDate: "August 19, 2024",
   },
   {
@@ -29,15 +29,15 @@ const jobPostData = [
     location: "Austin, TX",
     description:
       "We are hiring a product manager to lead our new product line. Prior experience in product management is a must.",
-    logo: "/images/companies/company-03.png",
+    logo: "images/job/ayroui-white.svg",
     postedDate: "August 18, 2024",
   },
 ];
 
 const LatestJobPosts = () => {
   return (
-    <section className="bg-gray-1 py-20 dark:bg-dark-2 md:py-[120px]">
-      <div className="container px-4">
+    <section className="py-20 bg-gray-100 dark:bg-dark-2 md:py-[120px]">
+      <div className="container mx-auto px-4">
         <SectionTitle
           subtitle="Latest Job Posts"
           title="Explore New Opportunities"
@@ -46,9 +46,37 @@ const LatestJobPosts = () => {
           center
         />
 
-        <div className="mt-[60px] flex flex-wrap lg:mt-20 gap-y-8">
+        <div className="mt-[60px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:mt-20">
           {jobPostData.map((job) => (
-            <LatestJobPost key={job.id} job={job} />
+            <div
+              key={job.id}
+              className="p-6 bg-white dark:bg-dark-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="flex items-center mb-4">
+                <img
+                  src={job.logo}
+                  alt={`${job.company} logo`}
+                  className="w-12 h-12 mr-4"
+                />
+                <div>
+                  <h3 className="text-xl font-semibold dark:text-white">
+                    {job.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {job.company} - {job.location}
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-700 dark:text-gray-300 mb-4 line-clamp-2">
+                {job.description}
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                Posted on {job.postedDate}
+              </p>
+              <button className="mt-4 w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-200">
+                Apply Now
+              </button>
+            </div>
           ))}
         </div>
       </div>

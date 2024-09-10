@@ -110,7 +110,7 @@ const Contact = () => {
                   </label>
                   <input
                     type="text"
-                    name="phone"
+                    name="Phone"
                     placeholder="+916386702044"
                     className="w-full border-0 border-b border-[#f1f1f1] bg-transparent pb-3 text-dark placeholder:text-body-color/60 focus:border-primary focus:outline-none dark:border-dark-3 dark:text-white"
                   />
@@ -123,15 +123,15 @@ const Contact = () => {
                     Message*
                   </label>
                   <textarea
-                    name="message"
+                    name="Message"
                     rows={1}
-                    placeholder="type your message here"
+                    placeholder="Type your message here"
                     className="w-full resize-none border-0 border-b border-[#f1f1f1] bg-transparent pb-3 text-dark placeholder:text-body-color/60 focus:border-primary focus:outline-none dark:border-dark-3 dark:text-white"
                   ></textarea>
                 </div>
                 <div className="mb-0">
                   <button
-                    type="submit"
+                    type="Submit"
                     className="inline-flex items-center justify-center rounded-md bg-primary px-10 py-3 text-base font-medium text-white transition duration-300 ease-in-out hover:bg-primary/90"
                   >
                     Send

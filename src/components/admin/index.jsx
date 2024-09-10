@@ -1,156 +1,566 @@
 "use client";
-import { useState } from "react";
-import EmployeeTable from "../../../models/EmployeeTable";
-import Modal from "../../../models/Modal";
-import EditModal from "../../../models/EditModel";
-import Delete from "../../../models/Delete";
-import AddEmployeeModal from "../../../models/AddEmployee";
-import { FaSearch, FaPlus } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
 
-export default function Admin() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [addEmployeeModalVisible, setAddEmployeeModalVisible] = useState(false);
+export default function Widget() {
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [editableEmployee, setEditableEmployee] = useState(null);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [newEmployee, setNewEmployee] = useState({
+    name: "",
+    email: "",
+    contact: "",
+    position: "",
+    status: "",
+    profileType: "",
+  });
+
   const [employees, setEmployees] = useState([
     {
-      id: 1,
-      name: "John Doe",
-      position: "Developer",
-      department: "Engineering",
+      name: "Ayushi",
+      email: "aayushi@gmail.com",
+      contact: "1234567890",
+      position: "Sales",
+      status: "Active",
+      profileType: "Self",
     },
-    { id: 2, name: "Jane Smith", position: "Designer", department: "Product" },
-    { id: 3, name: "Michael Brown", position: "Manager", department: "Sales" },
+    {
+      name: "Ayushi",
+      email: "aayushi@gmail.com",
+      contact: "1234567890",
+      position: "Sales",
+      status: "Active",
+      profileType: "Self",
+    },
+    {
+      name: "Pankaj",
+      email: "pankaj@gmail.com",
+      contact: "3436787654",
+      position: "Sales",
+      status: "Active",
+      profileType: "Added",
+    },
+    {
+      name: "Bhavya",
+      email: "bhavya@gmail.com",
+      contact: "5247387432",
+      position: "Sales",
+      status: "Inactive",
+      profileType: "Added",
+    },
+    {
+      name: "Himanshu",
+      email: "himanshu@gmail.com",
+      contact: "34232453",
+      position: "Sales",
+      status: "Inactive",
+      profileType: "Self",
+    },
+    {
+      name: "Ansh",
+      email: "ansh@gmail.com",
+      contact: "4324534543",
+      position: "Sales",
+      status: "Active",
+      profileType: "Self",
+    },
   ]);
 
-  const openModal = (employee) => {
+  const openDetailModal = (employee) => {
     setSelectedEmployee(employee);
-    setModalVisible(true);
+    setIsDetailModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeDetailModal = () => {
+    setIsDetailModalOpen(false);
     setSelectedEmployee(null);
-    setModalVisible(false);
   };
 
   const openEditModal = (employee) => {
-    setSelectedEmployee(employee);
-    setEditModalVisible(true);
+    setEditableEmployee({ ...employee });
+    setIsEditModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setSelectedEmployee(null);
-    setEditModalVisible(false);
+    setIsEditModalOpen(false);
+    setEditableEmployee(null);
   };
 
-  const openDeleteModal = (employee) => {
-    setSelectedEmployee(employee);
-    setDeleteModalVisible(true);
+  const openDeleteConfirm = (employee) => {
+    setEmployeeToDelete(employee);
+    setIsDeleteConfirmOpen(true);
   };
 
-  const closeDeleteModal = () => {
-    setSelectedEmployee(null);
-    setDeleteModalVisible(false);
+  const closeDeleteConfirm = () => {
+    setIsDeleteConfirmOpen(false);
+    setEmployeeToDelete(null);
   };
 
-  const openAddEmployeeModal = () => {
-    setAddEmployeeModalVisible(true);
+  const openAddModal = () => {
+    setNewEmployee({
+      name: "",
+      email: "",
+      contact: "",
+      position: "",
+      status: "",
+      profileType: "",
+    });
+    setIsAddModalOpen(true);
   };
 
-  const closeAddEmployeeModal = () => {
-    setAddEmployeeModalVisible(false);
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
   };
 
-  const saveEmployee = (updatedEmployee) => {
-    setEmployees(
-      employees.map((emp) =>
-        emp.id === updatedEmployee.id ? updatedEmployee : emp
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditableEmployee((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+
+    setEmployees((prevEmployees) =>
+      prevEmployees.map((emp) =>
+        emp.email === editableEmployee.email ? editableEmployee : emp
       )
     );
     closeEditModal();
   };
 
-  const deleteEmployee = (employeeId) => {
-    setEmployees(employees.filter((emp) => emp.id !== employeeId));
-    closeDeleteModal();
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) =>
+      prevEmployees.filter((emp) => emp.email !== employeeToDelete.email)
+    );
+    closeDeleteConfirm();
   };
 
-  const addEmployee = (newEmployee) => {
-    setEmployees([...employees, newEmployee]);
-    closeAddEmployeeModal();
+  const handleAddChange = (e) => {
+    const { name, value } = e.target;
+    setNewEmployee((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddSubmit = (e) => {
+    e.preventDefault();
+
+    setEmployees((prevEmployees) => [...prevEmployees, newEmployee]);
+    closeAddModal();
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-gray-100 py-20 dark:bg-gray-800">
-      {/* <Sidebar /> */}
-
-      <div className="container mx-auto px-4">
-        {/* Section Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-lg font-semibold text-gray-400">
-            Admin Dashboard
-          </h1>
+    <div className="flex h-screen bg-zinc-900 text-zinc-200">
+      <aside className="w-64 bg-zinc-800 text-white">
+        <div className="p-4">
+          <h2 className="text-lg font-bold">Dashboard</h2>
+          <ul className="mt-4">
+            <li className="py-2 px-3 hover:bg-zinc-700 rounded">
+              <a href="#">Employees</a>
+            </li>
+            <li className="py-2 px-3 hover:bg-zinc-700 rounded">
+              <a href="#">Leads</a>
+            </li>
+            <li className="py-2 px-3 hover:bg-zinc-700 rounded">
+              <a href="#">Inquiries</a>
+            </li>
+            <li className="py-2 px-3 hover:bg-zinc-700 rounded">
+              <a href="#">Projects</a>
+            </li>
+            <li className="py-2 px-3 hover:bg-zinc-700 rounded">
+              <a href="#">Feedback</a>
+            </li>
+            <li className="py-2 px-3 hover:bg-zinc-700 rounded">
+              <a href="#">Settings</a>
+            </li>
+          </ul>
         </div>
+      </aside>
 
-        <div className="flex flex-col md:flex-row items-center justify-between mb-8">
-          {/* Search Bar */}
-          <div className="relative w-full md:w-1/3">
+      <main className="flex-1 p-6 bg-zinc-900">
+        <header className="flex justify-between items-center mb-4">
+          <div className="flex items-center">
             <input
               type="text"
-              placeholder="Search employees..."
-              className="w-full p-2 pl-10 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Search..."
+              className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2"
             />
-            <FaSearch
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={20}
-            />
+            <button className="bg-blue-600 text-white p-2 rounded-lg ml-2 hover:bg-blue-500">
+              Search
+            </button>
           </div>
-          {/* Add Employee Button */}
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
-            onClick={openAddEmployeeModal}
-          >
-            <FaPlus size={16} className="inline-block mr-2" />
-            Add Employee
-          </button>
-        </div>
+          <div>
+            <button
+              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-500"
+              onClick={openAddModal}
+            >
+              Add Employee
+            </button>
+          </div>
+        </header>
 
-        {/* Employee Table */}
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md">
-          <EmployeeTable
-            employees={employees}
-            onView={openModal}
-            onEdit={openEditModal}
-            onDelete={openDeleteModal}
-          />
-        </div>
+        <table className="min-w-full bg-zinc-800 border border-zinc-700 text-zinc-200">
+          <thead>
+            <tr className="bg-zinc-700">
+              <th className="py-2 px-4 border border-zinc-600">Name</th>
+              <th className="py-2 px-4 border border-zinc-600">Email</th>
+              <th className="py-2 px-4 border border-zinc-600">Contact No</th>
+              <th className="py-2 px-4 border border-zinc-600">Position</th>
+              <th className="py-2 px-4 border border-zinc-600">Status</th>
+              <th className="py-2 px-4 border border-zinc-600">Profile Type</th>
+              <th className="py-2 px-4 border border-zinc-600">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {employees.map((employee, index) => (
+              <tr key={index} className="hover:bg-zinc-700">
+                <td className="py-2 px-4 border border-zinc-600">
+                  {employee.name}
+                </td>
+                <td className="py-2 px-4 border border-zinc-600">
+                  {employee.email}
+                </td>
+                <td className="py-2 px-4 border border-zinc-600">
+                  {employee.contact}
+                </td>
+                <td className="py-2 px-4 border border-zinc-600">
+                  {employee.position}
+                </td>
+                <td className="py-2 px-4 border border-zinc-600">
+                  {employee.status}
+                </td>
+                <td className="py-2 px-4 border border-zinc-600">
+                  {employee.profileType}
+                </td>
+                <td className="py-2 px-4 border border-zinc-600">
+                  <button
+                    className="text-blue-400 mx-1 hover:text-blue-300"
+                    onClick={() => openDetailModal(employee)}
+                  >
+                    <FaEye />
+                  </button>
+                  <button
+                    className="text-blue-400 mx-1 hover:text-blue-300"
+                    onClick={() => openEditModal(employee)}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    className="text-red-400 mx-1 hover:text-red-300"
+                    onClick={() => openDeleteConfirm(employee)}
+                  >
+                    <FaTrashAlt />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-        {/* Modals */}
-        {modalVisible && (
-          <Modal employee={selectedEmployee} onClose={closeModal} />
+        {isDetailModalOpen && selectedEmployee && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-zinc-800 text-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h2 className="text-lg font-bold mb-4">Employee Details</h2>
+              <p>
+                <strong>Name:</strong> {selectedEmployee.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedEmployee.email}
+              </p>
+              <p>
+                <strong>Contact No:</strong> {selectedEmployee.contact}
+              </p>
+              <p>
+                <strong>Position:</strong> {selectedEmployee.position}
+              </p>
+              <p>
+                <strong>Status:</strong> {selectedEmployee.status}
+              </p>
+              <p>
+                <strong>Profile Type:</strong> {selectedEmployee.profileType}
+              </p>
+              <div className="flex justify-end mt-4">
+                <button
+                  className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-400"
+                  onClick={closeDetailModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
         )}
-        {editModalVisible && (
-          <EditModal
-            employee={selectedEmployee}
-            onSave={saveEmployee}
-            onCancel={closeEditModal}
-          />
+
+        {isEditModalOpen && editableEmployee && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-zinc-800 text-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h2 className="text-lg font-bold mb-4">Edit Employee</h2>
+              <form onSubmit={handleEditSubmit}>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="name"
+                  >
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={editableEmployee.name}
+                    onChange={handleEditChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="email"
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={editableEmployee.email}
+                    onChange={handleEditChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="contact"
+                  >
+                    Contact No
+                  </label>
+                  <input
+                    id="contact"
+                    name="contact"
+                    type="text"
+                    value={editableEmployee.contact}
+                    onChange={handleEditChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="position"
+                  >
+                    Position
+                  </label>
+                  <input
+                    id="position"
+                    name="position"
+                    type="text"
+                    value={editableEmployee.position}
+                    onChange={handleEditChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="status"
+                  >
+                    Status
+                  </label>
+                  <input
+                    id="status"
+                    name="status"
+                    type="text"
+                    value={editableEmployee.status}
+                    onChange={handleEditChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="profileType"
+                  >
+                    Profile Type
+                  </label>
+                  <input
+                    id="profileType"
+                    name="profileType"
+                    type="text"
+                    value={editableEmployee.profileType}
+                    onChange={handleEditChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="submit"
+                    className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-500"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-red-500 text-white p-2 rounded-lg ml-2 hover:bg-red-400"
+                    onClick={closeEditModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         )}
-        {deleteModalVisible && (
-          <Delete
-            employee={selectedEmployee}
-            onConfirm={deleteEmployee}
-            onCancel={closeDeleteModal}
-          />
+
+        {isDeleteConfirmOpen && employeeToDelete && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-zinc-800 text-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
+              <p>
+                Are you sure you want to delete the employee{" "}
+                <strong>{employeeToDelete.name}</strong>?
+              </p>
+              <div className="flex justify-end mt-4">
+                <button
+                  className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-500"
+                  onClick={handleDeleteConfirm}
+                >
+                  Delete
+                </button>
+                <button
+                  className="bg-gray-600 text-white p-2 rounded-lg ml-2 hover:bg-gray-500"
+                  onClick={closeDeleteConfirm}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
         )}
-        {addEmployeeModalVisible && (
-          <AddEmployeeModal
-            onAdd={addEmployee}
-            onCancel={closeAddEmployeeModal}
-          />
+
+        {isAddModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-zinc-800 text-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h2 className="text-lg font-bold mb-4">Add Employee</h2>
+              <form onSubmit={handleAddSubmit}>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="name"
+                  >
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={newEmployee.name}
+                    onChange={handleAddChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="email"
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={newEmployee.email}
+                    onChange={handleAddChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="contact"
+                  >
+                    Contact No
+                  </label>
+                  <input
+                    id="contact"
+                    name="contact"
+                    type="text"
+                    value={newEmployee.contact}
+                    onChange={handleAddChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="position"
+                  >
+                    Position
+                  </label>
+                  <input
+                    id="position"
+                    name="position"
+                    type="text"
+                    value={newEmployee.position}
+                    onChange={handleAddChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="status"
+                  >
+                    Status
+                  </label>
+                  <input
+                    id="status"
+                    name="status"
+                    type="text"
+                    value={newEmployee.status}
+                    onChange={handleAddChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="profileType"
+                  >
+                    Profile Type
+                  </label>
+                  <input
+                    id="profileType"
+                    name="profileType"
+                    type="text"
+                    value={newEmployee.profileType}
+                    onChange={handleAddChange}
+                    className="border border-zinc-700 bg-zinc-800 text-white rounded-lg p-2 w-full"
+                  />
+                </div>
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="submit"
+                    className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-500"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-red-500 text-white p-2 rounded-lg ml-2 hover:bg-red-400"
+                    onClick={closeAddModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
