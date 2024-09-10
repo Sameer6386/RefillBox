@@ -1,5 +1,5 @@
 import SectionTitle from "../Common/SectionTitle";
-import LatestJobPost from "./SingleJob";
+import Image from "next/image"; // Import the Image component
 
 const jobPostData = [
   {
@@ -53,10 +53,12 @@ const LatestJobPosts = () => {
               className="p-6 bg-white dark:bg-dark-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <div className="flex items-center mb-4">
-                <img
+                <Image
                   src={job.logo}
                   alt={`${job.company} logo`}
-                  className="w-12 h-12 mr-4"
+                  width={48} // Specify width
+                  height={48} // Specify height
+                  className="mr-4"
                 />
                 <div>
                   <h3 className="text-xl font-semibold dark:text-white">
