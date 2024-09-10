@@ -1,11 +1,10 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiSun, FiMoon } from "react-icons/fi";
+import { FiMoon } from "react-icons/fi";
 import { FaUser } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
 import menuData from "./menuData";
@@ -39,13 +38,11 @@ const Header = () => {
     setOpenIndex(openIndex === index ? -1 : index);
   };
 
-  const { theme, setTheme } = useTheme();
-
   return (
     <header
       className={`fixed top-0 left-0 z-40 w-full ${
         sticky
-          ? "shadow-md border-b border-gray-200 bg-white dark:border-gray-900 dark:bg-gray-900"
+          ? "shadow-md border-b border-gray-700 bg-gray-900"
           : "absolute bg-transparent"
       }`}
     >
@@ -54,21 +51,14 @@ const Header = () => {
           <Link href="/" aria-label="Home">
             <Image
               src={
-                sticky ? "/images/logo/logo.svg" : "/images/logo/logo-white.svg"
+                sticky
+                  ? "/images/logo/logo-white.svg"
+                  : "/images/logo/logo-white.svg"
               }
               alt="logo"
               width={140}
               height={30}
-              className="hidden dark:block"
-            />
-            <Image
-              src={
-                sticky ? "/images/logo/logo-white.svg" : "/images/logo/logo.svg"
-              }
-              alt="logo"
-              width={140}
-              height={30}
-              className="block dark:hidden"
+              className="dark:block"
             />
           </Link>
         </div>
@@ -78,24 +68,24 @@ const Header = () => {
           className="lg:hidden flex items-center p-2"
         >
           <span
-            className={`block h-0.5 w-8 bg-gray-800 dark:bg-gray-200 transform transition-transform ${
+            className={`block h-0.5 w-8 bg-gray-200 dark:bg-gray-400 transform transition-transform ${
               navbarOpen ? "rotate-45 translate-y-1" : ""
             }`}
           />
           <span
-            className={`block h-0.5 w-8 bg-gray-800 dark:bg-gray-200 transition-opacity ${
+            className={`block h-0.5 w-8 bg-gray-200 dark:bg-gray-400 transition-opacity ${
               navbarOpen ? "opacity-0" : ""
             }`}
           />
           <span
-            className={`block h-0.5 w-8 bg-gray-800 dark:bg-gray-200 transform transition-transform ${
+            className={`block h-0.5 w-8 bg-gray-200 dark:bg-gray-400 transform transition-transform ${
               navbarOpen ? "-rotate-45 -translate-y-1" : ""
             }`}
           />
         </button>
 
         <nav
-          className={`absolute top-full right-0 mt-2 w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg lg:relative lg:flex lg:w-auto lg:bg-transparent lg:border-none lg:shadow-none ${
+          className={`absolute top-full right-0 mt-2 w-60 bg-gray-900 border border-gray-700 rounded-lg shadow-lg lg:relative lg:flex lg:w-auto lg:bg-gray-900 lg:border-none lg:shadow-none ${
             navbarOpen ? "block" : "hidden"
           }`}
         >
@@ -107,8 +97,8 @@ const Header = () => {
                     href={menuItem.path}
                     className={`block py-2 px-4 text-base ${
                       pathUrl === menuItem.path
-                        ? "text-blue-500 dark:text-blue-400"
-                        : "text-gray-800 dark:text-gray-200"
+                        ? "text-blue-400"
+                        : "text-gray-200"
                     }`}
                   >
                     {menuItem.title}
@@ -118,17 +108,17 @@ const Header = () => {
                 <li key={index} className="relative">
                   <button
                     onClick={() => handleSubmenu(index)}
-                    className="flex items-center py-2 px-4 text-base text-gray-800 dark:text-gray-200"
+                    className="flex items-center py-2 px-4 text-base text-gray-200"
                   >
                     {menuItem.title}
                     <RiArrowDownSLine
                       className={`ml-2 transition-transform ${
                         openIndex === index ? "rotate-180" : ""
-                      }`}
+                      } text-gray-200`}
                     />
                   </button>
                   <ul
-                    className={`absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg ${
+                    className={`absolute left-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg ${
                       openIndex === index ? "block" : "hidden"
                     }`}
                   >
@@ -136,7 +126,7 @@ const Header = () => {
                       <li key={subIndex}>
                         <Link
                           href={submenuItem.path}
-                          className="block py-2 px-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className="block py-2 px-4 text-sm text-gray-200 hover:bg-gray-700"
                         >
                           {submenuItem.title}
                         </Link>
@@ -150,28 +140,24 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          <button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            aria-label="Toggle Theme"
-            className="text-2xl text-gray-800 dark:text-gray-200"
-          >
-            {theme === "light" ? <FiMoon /> : <FiSun />}
+          <button aria-label="Toggle Theme" className="text-2xl text-gray-200">
+            <FiMoon className="text-gray-200" />
           </button>
           {session ? (
             <button
               onClick={() => signOut()}
               aria-label="Sign Out"
-              className="text-2xl text-gray-800 dark:text-gray-200"
+              className="text-2xl text-gray-200"
             >
-              <FaUser />
+              <FaUser className="text-gray-200" />
             </button>
           ) : (
             <Link
               href="/signin"
               aria-label="Sign In"
-              className="text-2xl text-gray-800 dark:text-gray-200"
+              className="text-2xl text-gray-200"
             >
-              <FaUser />
+              <FaUser className="text-gray-200" />
             </Link>
           )}
         </div>
